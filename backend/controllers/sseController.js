@@ -17,7 +17,7 @@ exports.sseConnect = (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-  res.setHeader("Access-Control-Allow-Origin", "http://192.168.1.44:5500");
+  res.setHeader("Access-Control-Allow-Origin", "https://liwan.mavoid.com");
 
   res.write(`data: Connection established for employee ID: ${_id}\n\n`);
   

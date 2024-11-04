@@ -126,8 +126,8 @@ exports.login = catchAsync(async (req, res, next) => {
   const cookieOptions = {
     httpOnly: true, // Prevent access by JavaScript
     secure: process.env.NODE_ENV === "production", // Use secure cookie in production
-    // sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    // domain: 'http://localhost:3000',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    domain: 'https://liwan.mavoid.com',
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
@@ -264,7 +264,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await emp.save({ validateBeforeSave: false });
 
   // 3- Send it to user's email using nodemailer (SendGrid)
-  const resetURL = `http://localhost:3000/reset/${resetToken}`;
+  const resetURL = `https://liwan.mavoid.com/reset/${resetToken}`;
 
   // HTML message with a styled button
   const htmlMessage = `
