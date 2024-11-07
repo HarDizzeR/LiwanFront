@@ -98,7 +98,7 @@ export function TicketManagement() {
       const employeeId = payload?.id;
 
       if (employeeId) {
-        fetch("https://liwandb.mavoid.com:5000/api/v1/employees/", {
+        fetch("http://127.0.0.1:5000/api/v1/employees/", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -115,7 +115,7 @@ export function TicketManagement() {
               // Fetch tickets for each managed department concurrently
               const fetchDepartmentTickets = async (deptId) => {
                 try {
-                  const response = await fetch(`https://liwandb.mavoid.com:5000/api/v1/departments/${deptId}`, {
+                  const response = await fetch(`http://127.0.0.1:5000/api/v1/departments/${deptId}`, {
                     headers: {
                       Authorization: `Bearer ${accessToken}`,
                     },

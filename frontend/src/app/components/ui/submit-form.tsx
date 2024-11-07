@@ -51,7 +51,7 @@ const TicketForm = () => {
         throw new Error('No access token found');
       }
 
-      const response = await fetch('https://liwandb.mavoid.com:5000/api/v1/departments', {
+      const response = await fetch('http://127.0.0.1:5000/api/v1/departments', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`, // Include the token here
@@ -105,7 +105,7 @@ const TicketForm = () => {
     };
 
     try {
-      const response = await fetch("https://liwandb.mavoid.com:5000/api/v1/tickets/", {
+      const response = await fetch("http://127.0.0.1:5000/api/v1/tickets/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

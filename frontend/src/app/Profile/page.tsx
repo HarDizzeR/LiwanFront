@@ -64,7 +64,7 @@ export function PersonalInformation() {
   }, []);
 
   const fetchEmployeeData = (token, employeeId) => {
-    fetch("https://liwandb.mavoid.com:5000/api/v1/employees/", {
+    fetch("http://127.0.0.1:5000/api/v1/employees/", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

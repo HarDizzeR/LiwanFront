@@ -96,7 +96,7 @@ export function TicketManagement() {
       const employeeId = payload?.id;
 
       if (employeeId) {
-        fetch("https://liwandb.mavoid.com:5000/api/v1/employees/", {
+        fetch("http://127.0.0.1:5000/api/v1/employees/", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -109,7 +109,7 @@ export function TicketManagement() {
             if (employee) {
               setEmployeeData(employee);
 
-              fetch("https://liwandb.mavoid.com:5000/api/v1/tickets/getMyTickets", {
+              fetch("http://127.0.0.1:5000/api/v1/tickets/getMyTickets", {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
                 },
