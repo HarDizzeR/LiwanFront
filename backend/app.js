@@ -30,9 +30,9 @@ app.use(xss());
 app.use("/user_ticket", express.static(path.join(__dirname, "user_ticket")));
 app.use(cookieParser());
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+// if (process.env.NODE_ENV === "development") {
+//   app.use(morgan("dev"));
+// }
 
 // Limit requests from same API
 const limiter = rateLimit({
