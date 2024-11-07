@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const compression = require("compression");
 const sseRouter = require("./routes/sseRoute");
-const AppError = require('./utils/AppError')
+const AppError = require("./utils/AppError");
 const ticketRouter = require("./routes/ticketRoute");
 const employeeRouter = require("./routes/employeeRoute");
 const departmentRouter = require("./routes/departmentRoute");
@@ -20,8 +20,8 @@ const app = express();
 
 app.enable("trust-proxy");
 const corsOptions = {
-  origin: 'http://localhost:3000',  // explicitly specify your frontend URL
-  credentials: true,                // allow credentials (cookies) in requests
+  origin: "http://localhost:3000", // explicitly specify your frontend URL
+  credentials: true, // allow credentials (cookies) in requests
 };
 app.use(cors(corsOptions));
 app.use(helmet());
@@ -41,7 +41,6 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again in an hour!",
 });
 
-
 app.use("/api/v1/employees/login", limiter);
 
 app.use("/api/v1/employees/signUp", limiter);
@@ -50,8 +49,7 @@ app.use(express.json({ limit: "16mb" })); //limits the size of the body to 16mb
 
 app.use(compression());
 
-
-app.options('http://localhost:3000', cors(corsOptions));  // handle all OPTIONS requests
+app.options("http://localhost:3000", cors(corsOptions)); // handle all OPTIONS requests
 
 //test middleware
 app.use((req, res, next) => {
@@ -65,13 +63,9 @@ app.use("/api/v1/departments", departmentRouter);
 
 app.use("/api/v1/sse", sseRouter);
 
-
-app.all('*' , (req , res ,next)=>{
-  next(new AppError( `Can't find ${req.originalUrl} on this server!`, 404))
-})
-
-
-
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
 app.use(globalErrorHandler);
 module.exports = app;

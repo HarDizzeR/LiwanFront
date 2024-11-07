@@ -126,8 +126,8 @@ exports.login = catchAsync(async (req, res, next) => {
   const cookieOptions = {
     httpOnly: true, // Prevent access by JavaScript
     secure: process.env.NODE_ENV === "production", // Use secure cookie in production
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    domain: 'http://localhost:3000',
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    // domain: 'http://localhost:3000',
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
