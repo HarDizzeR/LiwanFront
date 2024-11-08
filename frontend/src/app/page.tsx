@@ -92,8 +92,9 @@ export function AuroraBackgroundDemo() {
                   : "/liwan-logo-inverted.png"
               }
               alt="logo"
-              width={theme === "dark" ? 400 : 340} // Set specific width for each theme
-              height={theme === "dark" ? 400 : 340} // Set specific height for each theme
+              width={380} // Unified width for both themes
+              height={430} // Unified height for both themes
+              className="mx-auto" // Center-align the image
             />
           </div>
         </div>
@@ -108,15 +109,13 @@ export function AuroraBackgroundDemo() {
 
         <div className="flex space-x-4">
           {isSignedIn ? (
-            <>
-              <button
-                className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border px-6 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 
+            <button
+              className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border px-6 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 
               border-blue-300 bg-[linear-gradient(110deg,#e0f2fe,45%,#bae6fd,55%,#e0f2fe)] bg-[length:200%_100%] text-blue-800 focus:ring-blue-600 focus:ring-offset-blue-200
               dark:border-slate-800 dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] dark:bg-[length:200%_100%] dark:text-slate-400 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-50"
-              >
-                <Link href="/user-main">Raise a Ticket</Link>
-              </button>
-            </>
+            >
+              <Link href="/user-main">Raise a Ticket</Link>
+            </button>
           ) : (
             <button
               className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border px-6 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 
@@ -133,20 +132,16 @@ export function AuroraBackgroundDemo() {
 }
 
 export default function Home() {
-  
-  // Code Written By Seif to Connect Backend with Frontend (DON'T MODIFY)
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
     return null;
   }
-  // Retrieve token from cookies
   const accessToken = getCookie("accessToken");
 
   if (accessToken) {
     console.log("Access Token:", accessToken);
-    // Use the token, e.g., to make an API request
   } else {
     console.log("No access token found. User may need to log in.");
   }

@@ -28,13 +28,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={theme}>
-      <body className={`${inter.className} bg-background text-foreground`}>
+      <body className={`${inter.className} bg-background text-foreground dark:bg-black dark:text-white`}>
         <div className="min-h-screen">
           <header className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-amber-800">Liwan</h1>
+            <h1 className="text-2xl font-bold text-Secondary">Liwan</h1>
             <button 
               onClick={toggleTheme} 
-              className="px-4 py-2 rounded-md bg-primary text-amber-800"
+              className="px-4 py-2 rounded-md bg-primary text-Secondary"
             >
               Toggle {theme === 'light' ? 'Dark' : 'Light'} Mode
             </button>

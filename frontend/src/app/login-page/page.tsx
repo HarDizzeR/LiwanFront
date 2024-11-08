@@ -90,7 +90,7 @@ export default function Login() {
     <div className="max-w-md mx-auto">
       <div className="border-2 border-gray-300 rounded-lg p-6 shadow-lg bg-background">
         <h2 className="text-2xl font-bold mb-4 text-center">
-          Log in with your <span className="text-[#C19E7B]">Liwan</span> Account
+          Log in with your <span className="text-Secondary">Liwan</span> Account
         </h2>
         <p className="text-center text-slate-500 mb-5">
           Login using your assigned Liwan email or Extension number and password
@@ -142,7 +142,7 @@ export default function Login() {
                     ${
                       visiblePassword ? radius + "px" : "0px"
                     } circle at ${mouseXPassword}px ${mouseYPassword}px,
-                    brown,
+                    #C19E7B,
                     transparent 80%
                   )
                 `,
@@ -166,7 +166,7 @@ export default function Login() {
           <div className="btn-submit flex justify-end">
             <button
               type="submit"
-              className="bg-zinc-950 text-white w-20 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="bg-zinc-950 text-Secondary w-20 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               Log In
             </button>

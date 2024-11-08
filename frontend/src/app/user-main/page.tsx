@@ -124,7 +124,7 @@ export function AppleCardsCarouselDemo() {
     },
   ]);
 
-  const decodeTokenPayload = (token) => {
+  const decodeTokenPayload = (token:string) => {
     try {
       const base64Payload = token.split(".")[1];
       const decodedPayload = atob(base64Payload);
@@ -255,7 +255,7 @@ export function SidebarDemo() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row bg-Primary dark:bg-neutral-950 w-full flex-1 border border-neutral-200 dark:border-neutral-700 overflow-hidden h-screen">
+    <div className="flex flex-row md:flex md:flex-row bg-Primary dark:bg-neutral-950 w-full flex-1 border border-neutral-200 dark:border-neutral-700 overflow-hidden h-screen">
       <SidebarProvider open={open} setOpen={setOpen}>
         <Sidebar open={open} setOpen={setOpen} links={links} />
         <Dashboard />

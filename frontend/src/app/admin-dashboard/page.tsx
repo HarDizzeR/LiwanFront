@@ -479,12 +479,12 @@ console.log(managers);
 
         {/* Managers Section */}
         <div>
-          <h2 className="text-xl font-semibold mb-4 px-8">Add Managers:</h2>
+          <h2 className="text-3xl font-semibold mb-4 px-8">Add Managers:</h2>
           <div className="grid md:grid-cols-3 grid-cols-1 gap-4 px-8 pt-4">
             {managers.map((manager) => (
               <div
                 key={manager._id}
-                className="border-2 dark:border-Primary border-neutral-200 shadow-lg rounded-lg duration-300 hover:shadow-xl p-4"
+                className="p-4 rounded-lg bg-Primary shadow-lg hover:shadow-2xl shadow-black/50 hover:shadow-black text-neutral-200 duration-300"
               >
                 <div className="md:max-w-none max-w-full">
                   <h3 className="font-semibold text-xl truncate">
@@ -507,7 +507,7 @@ console.log(managers);
             ))}
 
             {/* Add Manager Card */}
-            <div className="border-2 dark:border-Primary border-neutral-200 shadow-lg rounded-lg hover:shadow-xl duration-300 p-4">
+            <div className="p-4 rounded-lg bg-Primary shadow-lg hover:shadow-2xl shadow-black/50 hover:shadow-black text-neutral-200 duration-300">
               <div className="flex justify-center items-center p-14">
                 <button
                   className="flex justify-center items-center"
@@ -522,13 +522,14 @@ console.log(managers);
             </div>
           </div>
         </div>
+        <div className="my-16"></div>
         {/* Departments Section */}
-        <h2 className="text-xl font-semibold px-8 py-8">Add Departments:</h2>
+        <h2 className="text-3xl font-semibold px-8 py-8">Add Departments:</h2>
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 px-8 pt-4">
           {departments.map((department) => (
             <div
               key={department._id}
-              className="border-2 dark:border-Primary border-neutral-200 shadow-lg rounded-lg hover:shadow-xl duration-300 p-4"
+              className="p-4 rounded-lg bg-Primary shadow-lg hover:shadow-2xl shadow-black/50 hover:shadow-black text-neutral-200 duration-300"
             >
               <h3 className="font-semibold text-xl">{department.name}</h3>
               <div className="flex justify-center items-center p-4">
@@ -548,7 +549,7 @@ console.log(managers);
           ))}
 
           {/* Add Department Card */}
-          <div className="border-2 dark:border-Primary border-neutral-200 shadow-lg rounded-lg hover:shadow-xl duration-300 p-4">
+          <div className="p-4 rounded-lg bg-Primary shadow-lg hover:shadow-2xl shadow-black/50 hover:shadow-black text-neutral-200 duration-300">
             <button
               onClick={() => openModal("department")}
               className="flex justify-center items-center"
