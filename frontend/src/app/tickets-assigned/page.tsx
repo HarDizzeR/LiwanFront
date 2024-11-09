@@ -20,6 +20,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { GrDashboard } from "react-icons/gr";
 import { IconDashboard, IconLayoutDashboard } from "@tabler/icons-react";
 import { useRouter } from "next/navigation"; // Add this import
+import { useSSE } from '../../hooks/useSSE';
 
 export function TicketManagement() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,6 +30,30 @@ export function TicketManagement() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const router = useRouter(); // Initialize router here
+
+  const { sseStatus, sseError, isConnected } = useSSE(
+    (newTicket) => {
+      console.log('New ticket received:', newTicket);
+      setTickets(prevTickets => [newTicket, ...prevTickets]);
+    },
+    (updatedTicket) => {
+      console.log('Ticket update received:', updatedTicket);
+      setTickets(prevTickets => 
+        prevTickets.map(ticket => 
+          ticket._id === updatedTicket._id ? updatedTicket : ticket
+        )
+      );
+    }
+  );
+
+  // Optionally show SSE connection status
+  useEffect(() => {
+    if (sseError) {
+      console.error('SSE Error:', sseError);
+      // Handle error (e.g., show toast notification)
+    }
+  }, [sseError]);
+
 
   useEffect(() => {
     setMounted(true);

@@ -7,7 +7,7 @@ router.use(authController.protect);
 router
   .route("/:id")
   .get(
-    authController.restrictTo("admin", "manager"),
+    authController.restrictTo("admin", "manager","e"),
     departmentController.getDepartment
   )
   .patch(
@@ -18,7 +18,7 @@ router
     authController.restrictTo("admin", "manager"),
     departmentController.deleteDepartment
   );
-router.use(authController.restrictTo("admin", "manager"));
+router.use(authController.restrictTo("admin", "manager","employee"));
 router
   .route("/")
   .get(departmentController.getAllDepartments)

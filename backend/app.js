@@ -20,7 +20,7 @@ const app = express();
 
 app.enable("trust-proxy");
 const corsOptions = {
-  origin: "http://localhost:3000", // explicitly specify your frontend URL
+  origin: "http://127.0.0.1:3000", // explicitly specify your frontend URL
   credentials: true, // allow credentials (cookies) in requests
 };
 app.use(cors(corsOptions));
@@ -49,7 +49,7 @@ app.use(express.json({ limit: "16mb" })); //limits the size of the body to 16mb
 
 app.use(compression());
 
-app.options("http://localhost:3000", cors(corsOptions)); // handle all OPTIONS requests
+app.options("http://127.0.0.1:3000", cors(corsOptions)); // handle all OPTIONS requests
 
 //test middleware
 app.use((req, res, next) => {

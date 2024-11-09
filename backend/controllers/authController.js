@@ -124,16 +124,17 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // Store refresh token in an HTTP-only cookie
   const cookieOptions = {
-    httpOnly: true, // Prevent access by JavaScript
-    secure: process.env.NODE_ENV === "production", // Use secure cookie in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    // domain: 'http://localhost:3000',
+    // httpOnly: true, // Prevent access by JavaScript
+    secure: true, // Use secure cookie in production
+    sameSite: "None", // Prevent cross-site access,
+    // domain: 'http://127.0.0.1:3000/',
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
   };
 
   res.cookie("refreshToken", refreshToken, cookieOptions);
+  res.cookie("accessToken", accessToken, cookieOptions);
 
   // Respond with the token and employee ID
   res.status(200).json({
@@ -232,15 +233,16 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
 
     // Store refresh token in an HTTP-only cookie
     const cookieOptions = {
-      httpOnly: true, // Prevent access by JavaScript
-      secure: process.env.NODE_ENV === "production", // Use secure cookie in production
-      sameSite: "Strict", // Prevent cross-site access,
+      // httpOnly: true, // Prevent access by JavaScript
+      secure: true, // Use secure cookie in production
+      sameSite: "None", // Prevent cross-site access,
       expires: new Date(
         Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
       ),
     };
 
     res.cookie("refreshToken", newRefreshToken, cookieOptions);
+    res.cookie("accessToken", accessToken, cookieOptions);
     res.status(200).json({
       status: "success",
       accessToken,
@@ -264,7 +266,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await emp.save({ validateBeforeSave: false });
 
   // 3- Send it to user's email using nodemailer (SendGrid)
-  const resetURL = `http://localhost:3000/reset/${resetToken}`;
+  const resetURL = `http://127.0.0.1:3000/reset/${resetToken}`;
 
   // HTML message with a styled button
   const htmlMessage = `
@@ -335,9 +337,18 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 4- Send new refresh token in HttpOnly cookie
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    // httpOnly: true,
+    secure: true, // Use secure cookie in production
+    sameSite: "None", // Prevent cross-site access,
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+  });
+
+  res.cookie("accessToken", accessToken, {
+    // httpOnly: true,
+    secure: true, // Use secure cookie in production
+    sameSite: "None", // Prevent cross-site access,
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
@@ -380,9 +391,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 4- Clear the refresh token
   res.cookie("refreshToken", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    // httpOnly: true,
+    secure: true, // Use secure cookie in production
+    sameSite: "None", // Prevent cross-site access,
     expires: new Date(Date.now()),
   });
 
@@ -393,9 +404,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 exports.logout = catchAsync((req, res, next) => {
   res.cookie("accessToken", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    // httpOnly: true,
+    secure: true, // Use secure cookie in production
+    sameSite: "None", // Prevent cross-site access,
     expires: new Date(Date.now() + 5 * 1000), // Expires in 10 seconds
   });
 

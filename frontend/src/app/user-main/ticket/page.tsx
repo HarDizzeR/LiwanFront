@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ThemeProvider, useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { useSSE } from '../../../hooks/useSSE';
 
 export function TicketManagement() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -26,6 +27,21 @@ export function TicketManagement() {
   const [ticketsData, setTicketsData] = useState([]);
   const [showPending, setShowPending] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [tickets, setTickets] = useState([]);
+
+  const handleTicketCreated = (newTicket) => {
+    setTickets(prevTickets => [newTicket, ...prevTickets]);
+  };
+
+  const handleTicketUpdated = (updatedTicket) => {
+    setTickets(prevTickets => 
+      prevTickets.map(ticket => 
+        ticket._id === updatedTicket._id ? updatedTicket : ticket
+      )
+    );
+  };
+
+  const { sseStatus, sseError } = useSSE(handleTicketCreated, handleTicketUpdated);
 
   useEffect(() => {
     setMounted(true);
@@ -251,7 +267,7 @@ function TicketItem({ ticket, onView }) {
           {fileUploaded && (
             <div className="mt-2">
               <Image
-                src={`http://localhost:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                src={`http://127.0.0.1:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
                 alt="Ticket attachment"
                 width={100}
                 height={100}
@@ -351,7 +367,7 @@ function TicketDetailsPopup({ ticket, onClose }) {
             <div className="mt-4">
               <h3 className="font-semibold mb-2">Attachment</h3>
               <Image
-                src={`http://localhost:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                src={`http://127.0.0.1:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
                 alt="Ticket attachment"
                 width={300}
                 height={300}
@@ -376,7 +392,7 @@ function TicketDetailsPopup({ ticket, onClose }) {
                 {response.fileUploaded && (
                   <div className="mt-2">
                     <Image
-                      src={`http://localhost:5000/user_ticket/${response.createdBy?._id}/${response.fileUploaded}`}
+                      src={`http://127.0.0.1:5000/user_ticket/${response.createdBy?._id}/${response.fileUploaded}`}
                       alt="Response attachment"
                       width={200}
                       height={200}

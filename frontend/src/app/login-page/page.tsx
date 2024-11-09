@@ -45,13 +45,13 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/employees/login",
+        "http://127.0.0.1:5000/api/v1/employees/login",
         {
           method: "POST",
           credentials: 'include',
           headers: {
             "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': 'http://localhost:3000/',  // Frontend URL
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:3000/',  // Frontend URL
             'Access-Control-Allow-Credentials': 'true',              // Allow credentials
           },
           body: JSON.stringify({

@@ -1,57 +1,115 @@
-const clients = [];
-
+const clients = new Map(); // Using Map instead of array for better cleanup
 
 /**
  * @function sseConnect
- * @description Establishes an SSE connection with the client and maintains it open. Adds the client to a list of connected clients for real-time notifications.
- * @param {Object} req - The request object, which contains employee details (_id, role, and department).
- * @param {Object} res - The response object, which is kept open to send SSE updates.
- * @returns {void} Sets response headers to maintain an SSE connection, writes initial connection message, and adds the client to the clients array.
- * @event close - Removes the client from the `clients` array when the connection is closed.
+ * @description Establishes SSE connection with client
  */
+exports.sseConnect = async (req, res) => {
+  try {
+    // Validate employee data exists
+    if (!req.employee || !req.employee._id) {
+      console.error('[SSE] No employee data in request');
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
+    const { _id, role, department } = req.employee;
 
-exports.sseConnect = (req, res) => {
-  const { _id, role, department } = req.employee;
+    console.log(`[SSE] Connection attempt - ID: ${_id}, Role: ${role}, Dept: ${department}`);
 
-  res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Cache-Control", "no-cache");
-  res.setHeader("Connection", "keep-alive");
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+    // Set SSE headers
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
+      'Access-Control-Allow-Credentials': 'true'
+    });
 
-  res.write(`data: Connection established for employee ID: ${_id}\n\n`);
-  
-  clients.push({ res, employeeID: _id, role, departmentId: department });
+    // Send initial connection message
+    res.write(`data: ${JSON.stringify({ event: 'connected', message: 'Connection established' })}\n\n`);
 
-  req.on("close", () => {
-    const index = clients.findIndex(client => client.res === res);
-    if (index !== -1) clients.splice(index, 1);
-  });
+    // Store client connection
+    const clientId = `${_id}-${Date.now()}`;
+    const clientData = { 
+      res, 
+      employeeID: _id, 
+      role, 
+      departmentId: department,
+      connectedAt: new Date()
+    };
+    
+    clients.set(clientId, clientData);
+    console.log(`[SSE] Client connected - Total clients: ${clients.size}`);
+
+    // Handle client disconnect
+    req.on('close', () => {
+      clients.delete(clientId);
+      console.log(`[SSE] Client disconnected - Total clients: ${clients.size}`);
+    });
+
+  } catch (error) {
+    console.error('[SSE] Connection error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
-
 
 /**
  * @function notifyClients
- * @description Sends an SSE notification to connected clients based on their role and association with the ticket data.
- * @param {string} event - The event type to notify clients about (e.g., "ticketCreated", "ticketUpdated").
- * @param {Object} ticketData - The data about the ticket, which includes fields like `createdBy` and `assignedTo`.
- * @returns {void} Loops through connected clients, checking their role and department, and sends relevant notifications based on ticketData.
- * - Sends data to employees only if they created the ticket (`createdBy` matches employeeID).
- * - Sends data to managers only if the ticket is assigned to their department.
- * - Sends data to admins without restrictions.
+ * @description Sends notifications to connected clients
  */
-
-
 exports.notifyClients = (event, ticketData) => {
-  clients.forEach(({ res, employeeID, role, departmentId }) => {
-    if (role === "employee" && ticketData.createdBy.toString() === employeeID.toString()) {
-      res.write(`data: ${JSON.stringify({ event, data: ticketData })}\n\n`);
+  try {
+    if (!event || !ticketData) {
+      console.error('[SSE] Invalid notification data:', { event, ticketData });
+      return;
     }
-    else if (role === "manager" && ticketData.assignedTo.toString() === departmentId.toString()) {
-      res.write(`data: ${JSON.stringify({ event, data: ticketData })}\n\n`);
+
+    console.log(`[SSE] Sending ${event} notification to ${clients.size} clients`);
+
+    for (const [clientId, client] of clients.entries()) {
+      try {
+        const { res, employeeID, role, departmentId } = client;
+
+        // Check if client should receive notification
+        let shouldNotify = false;
+
+        switch (role) {
+          case 'employee':
+            shouldNotify = ticketData.createdBy?.toString() === employeeID?.toString();
+            break;
+          case 'manager':
+            shouldNotify = ticketData.assignedTo?.toString() === departmentId?.toString();
+            break;
+          case 'admin':
+            shouldNotify = true;
+            break;
+        }
+
+        if (shouldNotify) {
+          const message = JSON.stringify({ event, data: ticketData });
+          res.write(`data: ${message}\n\n`);
+          console.log(`[SSE] Notification sent to ${role} (${clientId})`);
+        }
+
+      } catch (error) {
+        console.error(`[SSE] Error sending to client ${clientId}:`, error);
+        clients.delete(clientId); // Remove failed connection
+      }
     }
-    else if (role === "admin") {
-      res.write(`data: ${JSON.stringify({ event, data: ticketData })}\n\n`);
-    }
-  });
+  } catch (error) {
+    console.error('[SSE] Notification error:', error);
+  }
+};
+
+// Add a health check endpoint
+exports.getConnectedClients = () => {
+  console.log('[SSE] Getting connected clients');
+  return {
+    totalClients: clients.size,
+    clients: Array.from(clients.entries()).map(([id, client]) => ({
+      id,
+      role: client.role,
+      connectedAt: client.connectedAt
+    }))
+  };
 };
