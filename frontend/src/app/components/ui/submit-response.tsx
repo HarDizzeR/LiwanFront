@@ -56,7 +56,7 @@ const TicketResponsePage = () => {
         throw new Error("No access token found");
       }
 
-      const response = await fetch(`http://127.0.0.1:5000/api/v1/tickets/${ticketId}`, {
+      const response = await fetch(`https://liwan-back.vercel.app/api/v1/tickets/${ticketId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -99,7 +99,7 @@ const TicketResponsePage = () => {
         fileUploaded,
       };
   
-      const submitResponse = await fetch(`http://127.0.0.1:5000/api/v1/tickets/${ticketId}`, {
+      const submitResponse = await fetch(`https://liwan-back.vercel.app/api/v1/tickets/${ticketId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

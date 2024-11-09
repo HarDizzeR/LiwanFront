@@ -101,7 +101,7 @@ export function TicketManagement() {
       const employeeId = payload?.id;
 
       if (employeeId) {
-        fetch("http://127.0.0.1:5000/api/v1/employees/", {
+        fetch("https://liwan-back.vercel.app/api/v1/employees/", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -114,7 +114,7 @@ export function TicketManagement() {
             if (employee) {
               setEmployeeData(employee);
 
-              fetch("http://127.0.0.1:5000/api/v1/tickets/getMyTickets", {
+              fetch("https://liwan-back.vercel.app/api/v1/tickets/getMyTickets", {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
                 },
@@ -267,7 +267,7 @@ function TicketItem({ ticket, onView }) {
           {fileUploaded && (
             <div className="mt-2">
               <Image
-                src={`http://127.0.0.1:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                src={`https://liwan-back.vercel.app/user_ticket/${createdBy?._id}/${fileUploaded}`}
                 alt="Ticket attachment"
                 width={100}
                 height={100}
@@ -367,7 +367,7 @@ function TicketDetailsPopup({ ticket, onClose }) {
             <div className="mt-4">
               <h3 className="font-semibold mb-2">Attachment</h3>
               <Image
-                src={`http://127.0.0.1:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                src={`https://liwan-back.vercel.app/user_ticket/${createdBy?._id}/${fileUploaded}`}
                 alt="Ticket attachment"
                 width={300}
                 height={300}
@@ -392,7 +392,7 @@ function TicketDetailsPopup({ ticket, onClose }) {
                 {response.fileUploaded && (
                   <div className="mt-2">
                     <Image
-                      src={`http://127.0.0.1:5000/user_ticket/${response.createdBy?._id}/${response.fileUploaded}`}
+                      src={`https://liwan-back.vercel.app/user_ticket/${response.createdBy?._id}/${response.fileUploaded}`}
                       alt="Response attachment"
                       width={200}
                       height={200}

@@ -40,7 +40,7 @@ const TicketForm = () => {
         throw new Error('No access token found');
       }
 
-      const response = await fetch('http://127.0.0.1:5000/api/v1/departments', {
+      const response = await fetch('https://liwan-back.vercel.app/api/v1/departments', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const TicketForm = () => {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/v1/tickets/", {
+      const response = await fetch("https://liwan-back.vercel.app/api/v1/tickets/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

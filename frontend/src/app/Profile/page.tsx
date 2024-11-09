@@ -45,7 +45,7 @@ const PersonalInformationForm = () => {
   }, []);
 
   const fetchEmployeeData = (token, employeeId) => {
-    fetch("http://127.0.0.1:5000/api/v1/employees/", {
+    fetch("https://liwan-back.vercel.app/api/v1/employees/", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

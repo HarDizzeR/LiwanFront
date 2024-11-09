@@ -131,7 +131,7 @@ export function AdminDashboard() {
       const employeeId = payload?.id;
 
       if (employeeId) {
-        fetch("http://127.0.0.1:5000/api/v1/employees/", {
+        fetch("https://liwan-back.vercel.app/api/v1/employees/", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -162,7 +162,7 @@ export function AdminDashboard() {
   // Fetch departments
   useEffect(() => {
     if (isAdmin) {
-      fetch("http://127.0.0.1:5000/api/v1/departments/", {
+      fetch("https://liwan-back.vercel.app/api/v1/departments/", {
         headers: {
           Authorization: `Bearer ${
             document.cookie
@@ -186,7 +186,7 @@ export function AdminDashboard() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:5000/api/v1/departments/",
+        "https://liwan-back.vercel.app/api/v1/departments/",
         {
           method: "POST",
           headers: {
@@ -227,7 +227,7 @@ export function AdminDashboard() {
       .split("; ")
       .find((row) => row.startsWith("accessToken"))
       ?.split("=")[1];
-      const response = await fetch('http://127.0.0.1:5000/api/v1/employees/UpdateManagerDep', {
+      const response = await fetch('https://liwan-back.vercel.app/api/v1/employees/UpdateManagerDep', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ export function AdminDashboard() {
     try {
       // Make the DELETE request to the API endpoint
       const response = await fetch(
-        `http://127.0.0.1:5000/api/v1/departments/${departmentId}`,
+        `https://liwan-back.vercel.app/api/v1/departments/${departmentId}`,
         {
           method: "DELETE",
           headers: {
@@ -293,7 +293,7 @@ export function AdminDashboard() {
   const fetchDepartments = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:5000/api/v1/departments/",
+        "https://liwan-back.vercel.app/api/v1/departments/",
         {
           headers: {
             Authorization: `Bearer ${
@@ -323,7 +323,7 @@ export function AdminDashboard() {
       ?.split("=")[1];
 
     if (accessToken) {
-      fetch("http://127.0.0.1:5000/api/v1/employees/", {
+      fetch("https://liwan-back.vercel.app/api/v1/employees/", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -370,7 +370,7 @@ console.log(managers);
       .split("; ")
       .find((row) => row.startsWith("accessToken"))
       ?.split("=")[1];
-      const response = await fetch('http://127.0.0.1:5000/api/v1/employees/UpdateManagerDep', {
+      const response = await fetch('https://liwan-back.vercel.app/api/v1/employees/UpdateManagerDep', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

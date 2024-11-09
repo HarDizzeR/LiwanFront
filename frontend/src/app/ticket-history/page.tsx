@@ -97,7 +97,7 @@ export function TicketManagement() {
       const employeeId = payload?.id; // Get the employee ID from the token payload
 
       if (employeeId) {
-        fetch("http://127.0.0.1:5000/api/v1/employees/", {
+        fetch("https://liwan-back.vercel.app/api/v1/employees/", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -113,7 +113,7 @@ export function TicketManagement() {
 
               // Fetch tickets if the user is an admin
               if (employee.role === "admin") {
-                fetch("http://127.0.0.1:5000/api/v1/tickets", {
+                fetch("https://liwan-back.vercel.app/api/v1/tickets", {
                   headers: {
                     Authorization: `Bearer ${accessToken}`,
                   },

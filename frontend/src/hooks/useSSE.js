@@ -33,7 +33,7 @@ export const useSSE = (onTicketCreated, onTicketUpdated) => {
         }
 
         // Create new connection
-        eventSource = new EventSource('http://127.0.0.1:5000/api/v1/sse/connect', {
+        eventSource = new EventSource('https://liwan-back.vercel.app/api/v1/sse/connect', {
           withCredentials: true
         });
 
