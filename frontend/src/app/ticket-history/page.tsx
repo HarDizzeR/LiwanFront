@@ -1,5 +1,5 @@
 "use client";
-
+import { Sidebar } from "@/app/components/ui/sidebar";
 import { useState, useEffect, SetStateAction } from "react";
 import {
   Moon,
@@ -180,73 +180,10 @@ export function TicketManagement() {
 
   return (
     <div className="flex h-screen bg-Primary text-neutral-200">
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full bg-Primary dark:bg-neutral-950 text-neutral-200 transition-all duration-300 ease-in-out z-10 flex flex-col ${
-          isExpanded ? "w-[300px]" : "w-[72px]"
-        }`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-      >
-        <div className="flex items-center p-4 mb-8">
-          <Link href={"/Profile"} className="flex items-center">
-            <img
-              src="/Sidebar-icon.jpg"
-              alt="Admin"
-              className="w-10 h-10 rounded-full mr-3"
-            />
-            {isExpanded && <span className="text-xl font-semibold">Admin</span>}
-          </Link>
-        </div>
-        <nav className="flex-grow">
-          <SidebarItem
-            icon={<Home size={20} />}
-            label="Home"
-            href="/user-main"
-            isExpanded={isExpanded}
-          />
-          <SidebarItem
-            icon={<History size={20} />}
-            label="History"
-            href="#"
-            isExpanded={isExpanded}
-          />
-          <SidebarItem
-            icon={<LayoutDashboard size={20} />}
-            label="Admin Dashboard"
-            href="/admin-dashboard"
-            isExpanded={isExpanded}
-          />
-          <SidebarItem
-            icon={<LogOut size={20} />}
-            label="Log Out"
-            href="/"
-            isExpanded={isExpanded}
-            onClick={() => {
-              document.cookie =
-              "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict";
-              // Redirect to the login page
-              router.push("/");
-            }}
-          />
-        </nav>
-        <button
-          onClick={toggleTheme}
-          className={`mt-auto w-full py-4 flex items-center justify-center bg-primary-foreground text-primary hover:bg-slate-200 hover:text-Primary rounded-sm transition-colors duration-300`}
-        >
-          {mounted && theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          {isExpanded && (
-            <span className="ml-2">
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </span>
-          )}
-        </button>
-      </aside>
-
       {/* Main content */}
       <main
         className={`flex-1 p-8 overflow-auto dark:bg-Primary bg-neutral-200 text-Primary dark:text-neutral-200 transition-all duration-300 ease-in-out ${
-          isExpanded ? "ml-[300px]" : "ml-[60px]"
+          isExpanded ? "ml-[150px]" : "ml-[30px]"
         }`}
       >
         <div className="max-w-4xl mx-auto">
@@ -470,41 +407,15 @@ function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
   );
 };
 
-
-function SidebarItem({
-  icon,
-  label,
-  href,
-  isExpanded,
-  onClick
-}: {
-  icon: React.ReactNode;
-  label: string;
-  href: string;
-  isExpanded: boolean;
-  onClick?: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center mb-1 hover:text-white cursor-pointer transition-colors duration-300 px-4 py-1" onClick={onClick}
-    >
-      <div className="w-8">{icon}</div>
-      <span
-        className={`ml-2 ${
-          isExpanded ? "opacity-100" : "opacity-0 w-0"
-        } transition-all duration-300`}
-      >
-        {label}
-      </span>
-    </Link>
-  );
-}
-
-export default function TicketHistory() {
+export default function Page() {
   return (
     <ThemeProvider attribute="class">
-      <TicketManagement />
+    <div className="flex h-screen bg-Primary">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto">
+          <TicketManagement />
+        </main>
+      </div>
     </ThemeProvider>
   );
 }

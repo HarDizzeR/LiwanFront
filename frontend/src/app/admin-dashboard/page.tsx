@@ -1,5 +1,5 @@
 "use client";
-
+import { Sidebar } from "@/app/components/ui/sidebar";
 import { useState, useEffect } from "react";
 import { Moon, Sun, Home, History, LogOut, X } from "lucide-react";
 import Link from "next/link";
@@ -408,69 +408,10 @@ console.log(managers);
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full dark:bg-neutral-950 text-neutral-200 bg-Primary p-4 transition-all duration-300 ease-in-out z-10 flex flex-col ${
-          isExpanded ? "w-[300px]" : "w-[72px]"
-        }`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-      >
-        <div className="flex items-center mb-8">
-          <Link href={"/Profile"} className="flex items-center">
-            <img
-              src="/Sidebar-icon.jpg"
-              alt="Admin"
-              className="w-10 h-10 rounded-full mr-3"
-            />
-            {isExpanded && <span className="text-xl font-semibold">Admin</span>}
-          </Link>
-        </div>
-        <nav className="flex-grow">
-          <SidebarItem
-            icon={<Home size={20} />}
-            label="Home"
-            href="/user-main"
-            isExpanded={isExpanded}
-          />
-          <SidebarItem
-            icon={<History size={20} />}
-            label="History"
-            href="/ticket-history"
-            isExpanded={isExpanded}
-          />
-          <SidebarItem
-            icon={<LogOut size={20} />}
-            label="Log out"
-            href="/"
-            isExpanded={isExpanded}
-            onClick={() => {
-              document.cookie =
-              "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict";
-              // Redirect to the login page
-              router.push("/");
-            }}
-          />
-        </nav>
-        <button
-          onClick={toggleTheme}
-          className={`mt-auto w-full py-2 flex items-center hover:bg-gray-700 text-white hover:bg-opacity-80 transition-colors duration-300 rounded ${
-            isExpanded ? "text-left" : "text-center"
-          }`}
-        >
-          {themeIcon}
-          {isExpanded && (
-            <span className="ml-2">
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </span>
-          )}
-        </button>
-      </aside>
-
       {/* Main content */}
       <main
         className={`flex-1 p-4 transition-all duration-300 dark:bg-Primary dark:text-neutral-200 bg-neutral-200 text-Primary h-fit ${
-          isExpanded ? "ml-[300px]" : "ml-[72px]"
+          isExpanded ? "ml-[150px]" : "ml-[30px]"
         }`}
       >
         <h1 className="text-2xl md:text-3xl font-bold mb-4 px-8 py-4">
@@ -651,40 +592,15 @@ console.log(managers);
   );
 }
 
-function SidebarItem({
-  icon,
-  label,
-  href,
-  isExpanded,
-  onClick
-}: {
-  icon: React.ReactNode;
-  label: string;
-  href: string;
-  isExpanded: boolean;
-  onClick?: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center mb-1 hover:text-white cursor-pointer transition-colors duration-300 px-4 py-1" onClick={onClick}
-    >
-      <div className="w-8">{icon}</div>
-      <span
-        className={`ml-2 ${
-          isExpanded ? "opacity-100" : "opacity-0 w-0"
-        } transition-all duration-300`}
-      >
-        {label}
-      </span>
-    </Link>
-  );
-}
-
 export default function Page() {
   return (
     <ThemeProvider attribute="class">
-      <AdminDashboard />
+    <div className="flex h-screen bg-Primary">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto">
+          <AdminDashboard />
+        </main>
+      </div>
     </ThemeProvider>
   );
 }
