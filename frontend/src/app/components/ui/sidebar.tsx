@@ -28,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const [isManager, setIsManager] = useState(false);
   const [isHomePage, setIsHomePage] = useState(false);
   const links: SidebarLink[] = [
+
     {
       label: "Home",
       href: "/user-main",
@@ -105,7 +106,7 @@ const Logo: React.FC = () => {
 
   return (
     <div
-      onClick={() => router.push("/Profile")}
+      onClick={() => router.push("/profile")}
       className="cursor-pointer font-normal flex space-x-2 items-center text-sm text-neutral-100 py-1 relative z-20"
     >
       <Image
@@ -132,7 +133,7 @@ const LogoIcon: React.FC = () => {
 
   return (
     <div
-      onClick={() => router.push("/Profile")}
+      onClick={() => router.push("/profile")}
       className="cursor-pointer font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
     >
       <Image

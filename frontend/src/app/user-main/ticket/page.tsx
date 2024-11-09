@@ -1,25 +1,17 @@
 "use client";
+
 import { Sidebar } from "@/app/components/ui/sidebar"
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Moon,
   Sun,
-  Home,
-  User,
-  Ticket,
-  History,
-  Settings,
-  LogOut,
-  ChevronUp,
-  ChevronDown,
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ThemeProvider, useTheme } from "next-themes";
-import { GrDashboard } from "react-icons/gr";
-import { IconDashboard, IconLayoutDashboard } from "@tabler/icons-react";
-import { useRouter } from "next/navigation"; // Add this import
+import { useRouter } from "next/navigation";
 
 export function TicketManagement() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -28,7 +20,12 @@ export function TicketManagement() {
   const [mounted, setMounted] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const router = useRouter(); // Initialize router here
+  const router = useRouter();
+
+  const [employeeData, setEmployeeData] = useState(null);
+  const [ticketsData, setTicketsData] = useState([]);
+  const [showPending, setShowPending] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -48,8 +45,6 @@ export function TicketManagement() {
     )
   ) : null;
 
-  // SEIF'S CODE TO CONNECT BACKEND WITH FRONTEND
-
   const decodeTokenPayload = (token) => {
     try {
       const base64Payload = token.split(".")[1];
@@ -61,29 +56,22 @@ export function TicketManagement() {
     }
   };
 
-  const [employeeData, setEmployeeData] = useState(null);
-  const [ticketsData, setTicketsData] = useState([]);
-  const [viewedTicket, setViewedTicket] = useState(null);
-  const [showPending, setShowPending] = useState(false);
-  const [showCompleted, setShowCompleted] = useState(false);
-
-  // Function to filter tickets based on status
   const filterTickets = () => {
     if (showPending)
       return ticketsData.filter((ticket) => ticket.status === "pending");
     if (showCompleted)
       return ticketsData.filter((ticket) => ticket.status === "completed");
-    return ticketsData; // Show all tickets by default
+    return ticketsData;
   };
 
   const handleViewTicket = (ticket) => {
-    setSelectedTicket(ticket); // Set the selected ticket here
-    setIsPopupOpen(true); // Open the popup
+    setSelectedTicket(ticket);
+    setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-    setSelectedTicket(null); // Reset selected ticket when closing
+    setSelectedTicket(null);
   };
 
   useEffect(() => {
@@ -139,7 +127,6 @@ export function TicketManagement() {
 
   return (
     <div className="flex h-screen">
-      {/* Main content */}
       <main
         className={`flex-1 p-8 bg-neutral-100 dark:bg-Primary overflow-auto transition-all duration-300 ease-in-out ${
           isExpanded ? "ml-[150px]" : "ml-[40px]"
@@ -216,7 +203,6 @@ export function TicketManagement() {
         </div>
       </main>
 
-      {/* Ticket Details Popup */}
       <AnimatePresence>
         {isPopupOpen && selectedTicket && (
           <TicketDetailsPopup
@@ -230,11 +216,7 @@ export function TicketManagement() {
 }
 
 function TicketItem({ ticket, onView }) {
-  // Extract necessary information from the ticket object
-  const { title, description, createdBy, createdAt, assignedTo, status } =
-    ticket;
-
-  // Format the created date
+  const { title, description, createdBy, createdAt, assignedTo, status, fileUploaded } = ticket;
   const createdDate = new Date(createdAt).toLocaleDateString();
 
   return (
@@ -249,17 +231,14 @@ function TicketItem({ ticket, onView }) {
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-semibold">{title}</h3>
-              <p className="text-sm opacity-80">{createdBy?.fullName}</p>{" "}
-              {/* Display full name of the creator */}
+              <p className="text-sm opacity-80">{createdBy?.fullName}</p>
             </div>
             <span className="text-sm opacity-80 font-semibold">
               {createdDate}
-            </span>{" "}
-            {/* Display created date */}
+            </span>
           </div>
           <p className="mt-2 text-sm">{description}</p>
-          <p className="mt-1 text-sm">Assigned to: {assignedTo?.name}</p>{" "}
-          {/* Display the assigned department */}
+          <p className="mt-1 text-sm">Assigned to: {assignedTo?.name}</p>
           <span
             className={`mt-2 inline-block px-2 py-1 rounded-full text-xs font-semibold ${
               status === "pending"
@@ -269,6 +248,17 @@ function TicketItem({ ticket, onView }) {
           >
             {status}
           </span>
+          {fileUploaded && (
+            <div className="mt-2">
+              <Image
+                src={`http://localhost:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                alt="Ticket attachment"
+                width={100}
+                height={100}
+                className="rounded-md object-cover"
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="flex justify-end">
@@ -283,7 +273,7 @@ function TicketItem({ ticket, onView }) {
   );
 }
 
-function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
+function TicketDetailsPopup({ ticket, onClose }) {
   const {
     title,
     description,
@@ -292,6 +282,7 @@ function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
     assignedTo,
     status,
     response,
+    fileUploaded,
   } = ticket;
   const createdDate = new Date(createdAt).toLocaleDateString();
   const router = useRouter();
@@ -356,6 +347,19 @@ function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
             </span>
           </div>
 
+          {fileUploaded && (
+            <div className="mt-4">
+              <h3 className="font-semibold mb-2">Attachment</h3>
+              <Image
+                src={`http://localhost:5000/user_ticket/${createdBy?._id}/${fileUploaded}`}
+                alt="Ticket attachment"
+                width={300}
+                height={300}
+                className="rounded-md object-cover"
+              />
+            </div>
+          )}
+
           <div className="mt-4 p-4 rounded-lg">
             <h3 className="font-semibold mb-2">Response</h3>
             {response ? (
@@ -369,6 +373,17 @@ function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
                   </p>
                 </div>
                 <p className="text-sm">{response.description}</p>
+                {response.fileUploaded && (
+                  <div className="mt-2">
+                    <Image
+                      src={`http://localhost:5000/user_ticket/${response.createdBy?._id}/${response.fileUploaded}`}
+                      alt="Response attachment"
+                      width={200}
+                      height={200}
+                      className="rounded-md object-cover"
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <p className="text-sm">No response yet.</p>
@@ -394,7 +409,7 @@ function TicketDetailsPopup({ ticket, onClose, onNavigateToRespond }) {
 export default function Page() {
   return (
     <ThemeProvider attribute="class">
-    <div className="flex h-screen bg-Primary">
+      <div className="flex h-screen bg-Primary">
         <Sidebar />
         <main className="flex-1 overflow-y-auto">
           <TicketManagement />

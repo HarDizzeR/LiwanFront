@@ -140,7 +140,6 @@ export function TicketManagement() {
       console.log("No access token found.");
     }
   }, []);
-
   const departments = Array.from(
     new Set(ticketsData.map((ticket) => ticket.assignedTo.name))
   );

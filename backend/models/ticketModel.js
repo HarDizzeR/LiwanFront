@@ -4,20 +4,20 @@ const ticketSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Ticket must has Title !"],
+      required: [true, "Ticket must have a Title!"],
     },
     description: {
       type: String,
-      required: [true, "Ticket must has Description !"],
+      required: [true, "Ticket must have a Description!"],
     },
     createdBy: {
-      type: mongoose.Schema.ObjectId, //employee ID
+      type: mongoose.Schema.ObjectId,
       ref: "Employee",
     },
     assignedTo: {
-      type: mongoose.Schema.ObjectId, //Department ID
+      type: mongoose.Schema.ObjectId,
       ref: "Department",
-      required: [true, "Ticket must has Assigned To !"],
+      required: [true, "Ticket must be Assigned To a department!"],
     },
     createdAt: {
       type: Date,
@@ -32,7 +32,7 @@ const ticketSchema = new mongoose.Schema(
     },
     response: {
       createdBy: {
-        type: mongoose.Schema.ObjectId, //manager ID
+        type: mongoose.Schema.ObjectId,
         ref: "Employee",
       },
       createdAt: {
@@ -46,6 +46,9 @@ const ticketSchema = new mongoose.Schema(
     fileUploaded: {
       type: String
     },
+    filePath: {
+      type: String
+    },
     hidden: { type: Boolean, default: false },
   },
   {
@@ -54,11 +57,13 @@ const ticketSchema = new mongoose.Schema(
     id: false,
   }
 );
+
 ticketSchema.pre(/^find/, function (next) {
   this.populate({ path: "assignedTo", select: "name" })
     .populate({ path: "createdBy", select: "fname lname" })
     .populate({ path: "response.createdBy", select: "fname lname" });
   next();
 });
+
 const Ticket = mongoose.model("Ticket", ticketSchema);
 module.exports = Ticket;
